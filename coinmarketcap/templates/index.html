@@ -91,6 +91,9 @@
               <td>{{coin.available_supply|floatformat|intcomma}} {{coin.symbol}}</td>
               <td class="{% if coin.percent_change_24h > 0.0 %}change-up{% else %}change-down{% endif%} text-center">{{coin.percent_change_24h}}%</td>
               <td class="text-center">
+                <a href="/edit-currency/{{coin.id}}" style="margin-right: 5px;">
+                  <i style="color: gray;" title='Edit' class="fas fa-edit"></i>
+                </a>
                 <a href="/delete-currency/{{coin.id}}">
                   <i style="color: crimson;" title='Delete' class="fas fa-trash"></i>
                 </a>
