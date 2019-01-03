@@ -105,7 +105,6 @@
               {% if request.user.is_authenticated and request.user.is_staff %}
                 <td class="text-center">
                   <a href="/edit-currency/{{coin.id}}" style="margin-right: 5px;">
-                    <!-- <button type="button" class="btn btn-outline-warning btn-xs">Edit</button> -->
                     <i style="color: gray;" title='Edit' class="fas fa-edit"></i>
                   </a>
                   <a href="/delete-currency/{{coin.id}}">
