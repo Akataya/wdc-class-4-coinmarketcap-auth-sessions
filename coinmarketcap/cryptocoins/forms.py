@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth.models import User
 
 from cryptocoins.models import Cryptocurrency, Exchange
 
@@ -12,3 +13,11 @@ class CryptocurrencyForm(forms.ModelForm):
             'total_supply', 'max_supply', 'percent_change_1h',
             'percent_change_24h', 'percent_change_7d', 'exchange',
         ]
+
+
+class SignUpForm(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput())
+
+    class Meta:
+        model = User
+        fields = ['username']

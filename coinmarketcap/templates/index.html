@@ -26,6 +26,10 @@
       td.change-down {
         color: #d14836;
       }
+
+      .nav-item {
+        margin-left: 5px;
+      }
     </style>
   </head>
 
@@ -34,12 +38,13 @@
       <a class="navbar-brand" href="/"><img src="https://rmotr.com/static/favicons/apple-icon-60x60.c69b596ccabe.png" alt="" width="32"></a>
       <ul class="nav navbar-nav mr-auto"></ul>
       <ul class="nav navbar-nav">
-      {% if request.user.is_authenticated %}
-        <li class="nav-item"><a class="nav-link active" href="#"><i class="fa fa-user"></i> {{request.user.username|capfirst}}</a></li>
-        <li class="nav-item"><a class="btn btn-outline-light" href="/accounts/logout">Log out</a></li>
-      {% else %}
-        <li class="nav-item"><a class="btn btn-outline-light" href="/accounts/login">Log in</a></li>
-      {% endif %}
+        {% if request.user.is_authenticated %}
+          <li class="nav-item"><a class="nav-link active" href="#"><i class="fa fa-user"></i> {{request.user.username|capfirst}}</a></li>
+          <li class="nav-item"><a class="btn btn-outline-light" href="/accounts/logout">Log out</a></li>
+        {% else %}
+          <li class="nav-item"><a class="btn btn-outline-light" href="/accounts/login">Log in</a></li>
+          <li class="nav-item"><a class="btn btn-outline-light" href="/signup">Sign up</a></li>
+        {% endif %}
       </ul>
     </nav>
 
