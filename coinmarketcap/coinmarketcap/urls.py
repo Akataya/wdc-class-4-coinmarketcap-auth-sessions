@@ -13,13 +13,16 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.urls import path
 from django.contrib import admin
+from django.urls import path
 
-from cryptocoins.views import index
+from cryptocoins import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    path('', index, name='cryptocurrencies-table'),
+    path('', views.index, name='index'),
+    path('currencies/<int:coin_id>', views.detail, name='cryptocurrencies-detail'),
+    path('delete-currency/<int:coin_id>', views.delete, name='cryptocurrencies-delete'),
+    path('create-currency/', views.create, name='cryptocurrencies-create'),
 ]

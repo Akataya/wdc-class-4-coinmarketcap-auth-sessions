@@ -1,0 +1,14 @@
+{% extends "index.html" %}
+{% load crispy_forms_tags %}
+
+{% block main %}
+  <form action="{% url 'cryptocurrencies-create' %}" method='POST'>
+    {% csrf_token %}
+    <a style="margin-bottom: 10px;" class="btn btn-outline-primary float-right" href="/" role="button">Back to cryptos</a>
+    <p class="lead">Create a new Cryptocurrency:</p>
+
+    {{ cryptocurrency_form|crispy }}
+
+    <button type="submit" class="btn btn-primary float-right">Create</button>
+  </form>
+{% endblock %}
