@@ -1,9 +1,13 @@
 from django.db.models import Q
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import render, redirect, get_object_or_404
 
 from cryptocoins.forms import CryptocurrencyForm
 from cryptocoins.models import Cryptocurrency, Exchange
+
+
+def is_staff(user):
+    return user.is_staff
 
 
 def index(request):
@@ -53,6 +57,7 @@ def delete(request, coin_id):
 
 
 @login_required
+@user_passes_test(is_staff)
 def create(request):
     if request.method == 'GET':
         cryptocurrency_form = CryptocurrencyForm()
@@ -71,4 +76,36 @@ def create(request):
             request,
             'create_cryptocurrency.html',
             context={'cryptocurrency_form': cryptocurrency_form}
+        )
+
+
+
+
+@login_required
+@user_passes_test(is_staff)
+def edit(request, coin_id=None):
+    cryptocurrency = get_object_or_404(Cryptocurrency, id=coin_id)
+    if request.method == 'GET':
+        cryptocurrency_form = CryptocurrencyForm(instance=cryptocurrency)
+        return render(
+            request,
+            'edit_cryptocurrency.html',
+            context={
+                'cryptocurrecy': cryptocurrency,
+                'cryptocurrency_form': cryptocurrency_form
+            }
+        )
+    elif request.method == 'POST':
+        cryptocurrency_form = CryptocurrencyForm(
+            request.POST, instance=cryptocurrency)
+        if cryptocurrency_form.is_valid():
+            cryptocurrency_form.save()
+            return redirect('index')
+        return render(
+            request,
+            'edit_cryptocurrency.html',
+            context={
+                'cryptocurrecy': cryptocurrecy,
+                'cryptocurrency_form': cryptocurrency_form
+            }
         )
