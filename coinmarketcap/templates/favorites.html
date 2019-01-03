@@ -1,0 +1,53 @@
+{% extends "index.html" %}
+
+{% block main %}
+  <div>
+    <p class="lead">List of Favorite Currencies:</p>
+    {% if favorite_currencies %}
+      <div>
+        <table class="table table-striped">
+          <thead>
+            <tr class="text-center">
+              <th>Rank</th>
+              <th>Name</th>
+              <th>Exchange</th>
+              <th>Market Cap</th>
+              {% if order_param == 'price' and order_direction == 'asc' %}
+                <th><a href="?order_param=price&order_direction=desc">Price <span class="oi" data-glyph="sort-descending"></span></a></th>
+              {% else %}
+                <th><a href="?order_param=price&order_direction=asc">Price <span class="oi" data-glyph="sort-ascending"></span></a></th>
+              {% endif %}
+              <th>Volume (24h)</th>
+              <th>Circulating supply</th>
+              <th>Change (24h)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for coin in favorite_currencies %}
+            <tr class="text-center">
+              <td class="text-center">{{coin.rank}}</td>
+              <td class="text-left">
+                <img src="https://raw.githubusercontent.com/atomiclabs/cryptocurrency-icons/master/128/color/{{coin.symbol|lower}}.png" alt="" width="16">
+                <a href="{% url "cryptocurrencies-detail" coin_id=coin.id %}">{{coin.name}}</a>
+              </td>
+              <td class="text-center">{{coin.exchange.name}}</td>
+              <td>${{coin.market_cap_usd|floatformat}}</td>
+              <td>${{coin.price_usd}}</td>
+              <td>${{coin.volume_usd_24h|floatformat}}</td>
+              <td>{{coin.available_supply|floatformat}} {{coin.symbol}}</td>
+              <td class="{% if coin.percent_change_24h > 0.0 %}change-up{% else %}change-down{% endif%} text-center">{{coin.percent_change_24h}}%</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div>
+        <p class="text-center font-italic lead">You didn't mark any cryptocurrency as favorite yet.</p>
+      </div>
+    {% endif %}
+    <div>
+      <a href="/"><button type="button" class="btn btn-outline-primary">← Back</button></a>
+    </div>
+  </div>
+{% endblock %}

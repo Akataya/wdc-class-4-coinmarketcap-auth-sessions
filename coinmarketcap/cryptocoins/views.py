@@ -29,6 +29,11 @@ def index(request):
         order_by = '-' + order_by
 
     coins = coins.order_by(order_by)
+
+    # initialize list of favorite books for current session
+    request.session.setdefault('favorite_currencies', [])
+    request.session.save()
+
     return render(request, 'index.html', {
         'order_param': order_param,
         'order_direction': order_direction,
@@ -109,3 +114,29 @@ def edit(request, coin_id=None):
                 'cryptocurrency_form': cryptocurrency_form
             }
         )
+
+
+def favorites(request):
+    currencies_ids = request.session.get('favorite_currencies', [])
+    favorite_currencies = Cryptocurrency.objects.filter(id__in=currencies_ids)
+    return render(
+        request,
+        'favorites.html',
+        context={
+            'favorite_currencies': favorite_currencies,
+        }
+    )
+
+
+def add_to_favorites(request):
+    request.session.setdefault('favorite_currencies', [])
+    request.session['favorite_currencies'].append(request.POST.get('coin_id'))
+    request.session.save()
+    return redirect('index')
+
+
+def remove_from_favorites(request):
+    if request.session.get('favorite_currencies'):
+        request.session['favorite_currencies'].remove(request.POST.get('coin_id'))
+        request.session.save()
+    return redirect('index')

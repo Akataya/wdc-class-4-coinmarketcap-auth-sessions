@@ -27,4 +27,8 @@ urlpatterns = [
     path('delete-currency/<int:coin_id>', views.delete, name='cryptocurrencies-delete'),
     path('create-currency/', views.create, name='cryptocurrencies-create'),
     path('edit-currency/<int:coin_id>', views.edit, name='cryptocurrencies-edit'),
+
+    path('favorites/', views.favorites, name='favorites'),
+    path('add-to-favorites/', views.add_to_favorites, name='add_to_favorites'),
+    path('remove-from-favorites/', views.remove_from_favorites, name='remove_from_favorites'),
 ]
