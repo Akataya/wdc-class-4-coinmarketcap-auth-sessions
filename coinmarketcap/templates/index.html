@@ -31,14 +31,22 @@
 
   <body>
     <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-      <a class="navbar-brand" href="#"> <img src="https://rmotr.com/static/favicons/apple-icon-60x60.c69b596ccabe.png" alt="" width="32"> </a>
+      <a class="navbar-brand" href="/"><img src="https://rmotr.com/static/favicons/apple-icon-60x60.c69b596ccabe.png" alt="" width="32"></a>
+      <ul class="nav navbar-nav mr-auto"></ul>
+      <ul class="nav navbar-nav">
+      {% if request.user.is_authenticated %}
+        <li class="nav-item"><a class="nav-link active" href="#"><i class="fa fa-user"></i> {{request.user.username|capfirst}}</a></li>
+        <li class="nav-item"><a class="btn btn-outline-light" href="/accounts/logout">Log out</a></li>
+      {% else %}
+        <li class="nav-item"><a class="btn btn-outline-light" href="/accounts/login">Log in</a></li>
+      {% endif %}
+      </ul>
     </nav>
 
     <main role="main" class="container">
       <div class="starter-template">
-        <h1>Coinmarketcap clone</h1>
-
         {% block main %}
+        <h1>Coinmarketcap clone</h1>
         <p class="lead">This is a sample copy of <a href="https://coinmarketcap.com/" target="_blank">https://coinmarketcap.com/</a>, only for educational purposes.</p>
         <form class="" action="" method="get">
           <div class="form-group">
@@ -48,7 +56,9 @@
               </div>
               <div class="col-7">
                 <button type="submit" class="btn btn-primary">Search</button>
-                <a class="btn btn-success btn-primary float-right" href="/create-currency" role="button"><i class="fa fa-plus"></i> Add new coin</a>
+                {% if request.user.is_authenticated %}
+                  <a class="btn btn-success btn-primary float-right" href="/create-currency" role="button"><i class="fa fa-plus"></i> Add new coin</a>
+                {% endif %}
               </div>
             </div>
           </div>
@@ -73,7 +83,9 @@
               <th>Volume (24h)</th>
               <th>Circulating supply</th>
               <th>Change (24h)</th>
-              <th>Actions</th>
+              {% if request.user.is_authenticated %}
+                <th>Actions</th>
+              {% endif %}
             </tr>
           </thead>
           <tbody>
@@ -90,11 +102,13 @@
               <td>${{coin.volume_usd_24h|floatformat|intcomma}}</td>
               <td>{{coin.available_supply|floatformat|intcomma}} {{coin.symbol}}</td>
               <td class="{% if coin.percent_change_24h > 0.0 %}change-up{% else %}change-down{% endif%} text-center">{{coin.percent_change_24h}}%</td>
-              <td class="text-center">
-                <a href="/delete-currency/{{coin.id}}">
-                  <i style="color: crimson;" title='Delete' class="fas fa-trash"></i>
-                </a>
-              </td>
+              {% if request.user.is_authenticated %}
+                <td class="text-center">
+                  <a href="/delete-currency/{{coin.id}}">
+                    <i style="color: crimson;" title='Delete' class="fas fa-trash"></i>
+                  </a>
+                </td>
+              {% endif %}
             </tr>
             {% endfor %}
           </tbody>
