@@ -1,6 +1,6 @@
 <img align="right" width="120" alt="rmotr.com" src="https://user-images.githubusercontent.com/7065401/45454218-80bee800-b6b9-11e8-97bb-bb5e7675f440.png">
 
-# Coinmarketcap Authentication - Sessions - Custom commands
+# Coinmarketcap Advanced Features
 
 In our [previous class](https://github.com/rmotr-curriculum/wdc-class-3-coinmarketcap-django-forms) we've added some features to the [https://coinmarketcap.com/](https://coinmarketcap.com/) clone that we've been implementing. Today we will keep augmenting it with some more Django functionalities. 🙌
 
