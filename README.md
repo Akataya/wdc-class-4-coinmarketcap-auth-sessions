@@ -1,42 +1,62 @@
-# Coinmarketcap auth
+<img align="right" width="120" alt="rmotr.com" src="https://user-images.githubusercontent.com/7065401/45454218-80bee800-b6b9-11e8-97bb-bb5e7675f440.png">
 
-Remember the [https://coinmarketcap.com/](https://coinmarketcap.com/) clone we did in our [previous class](https://github.com/rmotr-curriculum/wdc-class-1-coinmarketcap-clone)? 💪 Today we will augment it with some authentication capabilities. 🙌
+# Coinmarketcap Authentication - Sessions - Custom commands
 
-We want users to be able to log in and log out from the app, using the built-in Django authentication views. Check the official documentation for extra details:
-[https://docs.djangoproject.com/en/2.0/topics/auth/default/](https://docs.djangoproject.com/en/2.0/topics/auth/default/)
+In our [previous class](https://github.com/rmotr-curriculum/wdc-class-3-coinmarketcap-django-forms) we've added some features to the [https://coinmarketcap.com/](https://coinmarketcap.com/) clone that we've been implementing. Today we will keep augmenting it with some more Django functionalities. 🙌
 
-## 1) Adding log in and log out views
+The goal of this practice is to learn how use Django built-in features in order to have Authentication, Permissions, Sessions and Custom commands.
 
-There's no need to implement the log in and log out features, Django comes with it out of the box. Just set the proper URLs, and add the link in your navbar like this:
+Those are very common useful tools that will help you while implementing any kind of application. The main idea is to make usage of the code provided by Django instead of implementing our own solution to those problems.
 
-![image](https://user-images.githubusercontent.com/1155573/38334488-dddf9f5e-3831-11e8-9728-fb4a2bcb3726.png)
+## 1) Authentication
 
-The view will look by default for a template called `templates/registration/login.html`. Just create a template with that name, and give it the styles you want. It should look something like this:
+For this first part, we'll make usage of the Authentication package provided by Django.
 
-![image](https://user-images.githubusercontent.com/1155573/38334570-0ebede00-3832-11e8-8b4f-0ad6353479a1.png)
+Just adding a new template under `templates/registration/login.html` and proper `accounts` URLs inside `coinmarketcap/urls.py`, we'll have our Authentication feature up and running
 
-For the log out view, you won't need any template. Just point the link to the URL you configured in your `utls.py` module, and that's it.
+We'll also add a Log in button to our navbar. Everything should look like this:
 
-## 2) Creating new coins
+<img width="775" alt="screen shot 2019-01-07 at 11 09 40" src="https://user-images.githubusercontent.com/2788551/50772576-0a984f80-126d-11e9-96ad-80ada8114fb1.png">
 
-As a second step, we want the users of our app to be able to create new Cryptocurrencies. For that we need to create a custom Django ModelForm, which will handle all the fields validation for us, according to the rules configured in the `Cryptocurrency` model.
+<img width="775" alt="screen shot 2019-01-07 at 11 10 48" src="https://user-images.githubusercontent.com/2788551/50772602-1be15c00-126d-11e9-8ae0-d33dcbf85e82.png">
 
-Add a button in the main page, with a link to `/create`. Should look something like:
+In case we want to make a view only available for logged in users, we can use the `login_required` decorator provided by Django, as well as showing/hiding some components in the template based on `request.user.is_authenticated` attribute.
 
-![image](https://user-images.githubusercontent.com/1155573/38335714-ad1c1cfe-3835-11e8-9000-a5792b28ac08.png)
 
-In the `/create` template, we will render a form with only a few of the required models to create a Cryptocurrency object. Check the following screenshot for extra details:
+## 2) Permissions
 
-![image](https://user-images.githubusercontent.com/1155573/38335769-e0800a24-3835-11e8-978a-b83fadbaba28.png)
+Sometimes we want to grant access to some functionalities for certain group of users, and avoid them to other group. For example, in this case we want to allow creating a new Cryptocurrency only to `staff` users.
 
-The ModelForm will handle all the fields validation, but you will need to show errors in the template properly if they are present.
+In order to restrict the access to certain view, we'll make usage of the `user_passes_test` decorator. This will receive a function (implemented by us) which should return a boolean value based on whatever logic we want. In this case we're just checking if the user is staff.
 
-*hint: check the `django-bootstrap4` library for easy integration of Bootstramp v4 in templates*
+In a similar way that we did before, we can add some statements in the template to show/hide certain components. In this case it can be `request.user.is_staff`.
 
-## 3) Let's practice some foreign relationships between models.
+## 3) Sessions
 
-We want to add a new `FavouriteCoin` model. It will have two new `ForeignKey` fields, one pointing to `User` and one to `Cryptocurrency`. Once you have the code in `models.py`, make sure to create the needed migrations.
+For this part we'll implement a new feature that will allow ANY kind of user to add Cryptocurrencies to a `Favorites` list.
 
-If you are done, open the Django Shel (run `django-admin shell` command), and play with the new model, creating or fetching them from the DB.
+Cryptocurrencies marked as favorites will remain in the user's `Session` as long as the it's logged in. Whenever the user logs out, the session will clear everything it has.
 
-That's all! 🎉 We just did a second iteration to the Coinmarketcap clone, adding some more advanced functionalities of the Django framework.
+Final state of this part should look like this:
+
+<img width="956" alt="screen shot 2019-01-07 at 11 28 36" src="https://user-images.githubusercontent.com/2788551/50773450-a1fea200-126f-11e9-9696-936857c66ff1.png">
+
+<img width="791" alt="screen shot 2019-01-07 at 11 31 49" src="https://user-images.githubusercontent.com/2788551/50773539-deca9900-126f-11e9-84b1-f873dff84329.png">
+
+## 4) Sign up
+
+Even though Django `DOES NOT` provide built in functionalities regarding sign up forms for creating new users, we'll create our own one in just a few simple steps.
+
+We'll need to implement a `SignUpForm` inside `cryptocoins/forms.py`, which will be rendered in a template under `templates/signup.html`.
+
+In a `signup` view inside `cryptocoins/views.py` we'll handle the logic that is in charged of creating the user if the provided data is valid, and if so, it'll log the user in and redirect him to the index page.
+
+<img width="616" alt="screen shot 2019-01-07 at 11 38 54" src="https://user-images.githubusercontent.com/2788551/50773892-dc1c7380-1270-11e9-9b49-5847829b3236.png">
+
+## 5) Custom commands
+
+In the same way we execute commands like `runserver`, `makemigrations` and so on, we can implement our own commands that can do whatever task we need to.
+
+For this part we'll implement a new custom command under `cryptocoins/management/commands/export_currencies_to_csv.py` that should be in charged of taking all the Cryptocurrencies stored in the database and export their data to a CSV formated file.
+
+That's all! 🎉 We just did a fourth iteration to the Coinmarketcap clone, adding some more advanced functionalities of the Django framework.
