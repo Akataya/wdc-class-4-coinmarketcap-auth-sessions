@@ -22,7 +22,6 @@ We'll also add a Log in button to our navbar. Everything should look like this:
 
 In case we want to make a view only available for logged in users, we can use the `login_required` decorator provided by Django, as well as showing/hiding some components in the template based on `request.user.is_authenticated` attribute.
 
-
 ## 2) Permissions
 
 Sometimes we want to grant access to some functionalities for certain group of users, and avoid them to other group. For example, in this case we want to allow creating a new Cryptocurrency only to `staff` users.
@@ -35,7 +34,7 @@ In a similar way that we did before, we can add some statements in the template 
 
 For this part we'll implement a new feature that will allow ANY kind of user to add Cryptocurrencies to a `Favorites` list.
 
-Cryptocurrencies marked as favorites will remain in the user's `Session` as long as the it's logged in. Whenever the user logs out, the session will clear everything it has.
+Cryptocurrencies marked as favorites will remain in the user's `Session` as long as it's logged in. Whenever the user logs out, the session will clear everything it has.
 
 Final state of this part should look like this:
 
@@ -55,8 +54,8 @@ In a `signup` view inside `cryptocoins/views.py` we'll handle the logic that is 
 
 ## 5) Custom commands
 
-In the same way we execute commands like `runserver`, `makemigrations` and so on, we can implement our own commands that can do whatever task we need to.
+In the same way we execute commands like `runserver`, `makemigrations`, etc, we can implement our own commands that can do whatever task we need.
 
-For this part we'll implement a new custom command under `cryptocoins/management/commands/export_currencies_to_csv.py` that should be in charged of taking all the Cryptocurrencies stored in the database and export their data to a CSV formated file.
+For this part we'll implement a new custom command under `cryptocoins/management/commands/export_currencies_to_csv.py` that should be in charged of getting all the Cryptocurrencies stored in the database and export their data to a CSV formated file.
 
 That's all! 🎉 We just did a fourth iteration to the Coinmarketcap clone, adding some more advanced functionalities of the Django framework.
